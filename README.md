@@ -3,3 +3,16 @@ A Reinforcement Learning environment built using pygame.
 
 ![gif](images/pyfootball.gif)
 
+
+To clone the work and run the main.py file using the following commands below
+
+``` 
+git clone https://github.com/elishatofunmi/pyfootball.git
+
+cd "pyfootball"
+
+python pyfootball.py
+
+```
+
+
