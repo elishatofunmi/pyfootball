@@ -1,4 +1,6 @@
 import time
+import os
+import sys
 from Scripts.PlayersProperties import *
 from Scripts.footballProperties import *
 from Scripts.net import network
@@ -37,79 +39,38 @@ class Environment:
         self.myFontA = pygame.font.SysFont("Times New Roman", 35)
         self.myFontB = pygame.font.SysFont("Times New Roman", 20)
 
-        # define the ball
-        self.foot_ball = pygame.image.load('images/others/ball.jpeg')
-        self.foot_ball = pygame.transform.scale(self.foot_ball, (20, 20))
-
-        # Define team A
-        self.TEAMA_goalkeeper = pygame.image.load('images/players/TeamAk.png')
-        self.TEAMA_goalkeeper = pygame.transform.scale(
-            self.TEAMA_goalkeeper, (20, 20))
-
-        self.TEAMA_one = pygame.image.load('images/players/teamA1.png')
-        self.TEAMA_one = pygame.transform.scale(self.TEAMA_one, (20, 20))
-
-        self.TEAMA_two = pygame.image.load('images/players/teamA2.png')
-        self.TEAMA_two = pygame.transform.scale(self.TEAMA_two, (20, 20))
-
-        self.TEAMA_three = pygame.image.load('images/players/teamA3.png')
-        self.TEAMA_three = pygame.transform.scale(self.TEAMA_three, (20, 20))
-
-        self.TEAMA_four = pygame.image.load('images/players/teamA4.png')
-        self.TEAMA_four = pygame.transform.scale(self.TEAMA_four, (20, 20))
-
-        self.TEAMA_five = pygame.image.load('images/players/teamA5.png')
-        self.TEAMA_five = pygame.transform.scale(self.TEAMA_five, (20, 20))
-
-        self.TEAMA_six = pygame.image.load('images/players/teamA6.png')
-        self.TEAMA_six = pygame.transform.scale(self.TEAMA_six, (20, 20))
-
-        self.TEAMA_seven = pygame.image.load('images/players/teamA7.png')
-        self.TEAMA_seven = pygame.transform.scale(self.TEAMA_seven, (20, 20))
-
-        self.TEAMA_eight = pygame.image.load('images/players/teamA8.png')
-        self.TEAMA_eight = pygame.transform.scale(self.TEAMA_eight, (20, 20))
-
-        self.TEAMA_nine = pygame.image.load('images/players/teamA9.png')
-        self.TEAMA_nine = pygame.transform.scale(self.TEAMA_nine, (20, 20))
-
-        self.TEAMA_ten = pygame.image.load('images/players/teamA10.png')
-        self.TEAMA_ten = pygame.transform.scale(self.TEAMA_ten, (20, 20))
-
-        # define team B
-        self.TEAMB_goalkeeper = pygame.image.load('images/players/TeamBk.png')
-        self.TEAMB_goalkeeper = pygame.transform.scale(
-            self.TEAMB_goalkeeper, (20, 20))
-
-        self.TEAMB_one = pygame.image.load('images/players/teamB1.png')
-        self.TEAMB_one = pygame.transform.scale(self.TEAMB_one, (20, 20))
-
-        self.TEAMB_two = pygame.image.load('images/players/teamB2.png')
-        self.TEAMB_two = pygame.transform.scale(self.TEAMB_two, (20, 20))
-
-        self.TEAMB_three = pygame.image.load('images/players/teamB3.png')
-        self.TEAMB_three = pygame.transform.scale(self.TEAMB_three, (20, 20))
-
-        self.TEAMB_four = pygame.image.load('images/players/teamB4.png')
-        self.TEAMB_four = pygame.transform.scale(self.TEAMB_four, (20, 20))
-
-        self.TEAMB_five = pygame.image.load('images/players/teamB5.png')
-        self.TEAMB_five = pygame.transform.scale(self.TEAMB_five, (20, 20))
-
-        self.TEAMB_six = pygame.image.load('images/players/teamB6.png')
-        self.TEAMB_six = pygame.transform.scale(self.TEAMB_six, (20, 20))
-
-        self.TEAMB_seven = pygame.image.load('images/players/teamB7.png')
-        self.TEAMB_seven = pygame.transform.scale(self.TEAMB_seven, (20, 20))
-
-        self.TEAMB_eight = pygame.image.load('images/players/teamB8.png')
-        self.TEAMB_eight = pygame.transform.scale(self.TEAMB_eight, (20, 20))
-
-        self.TEAMB_nine = pygame.image.load('images/players/teamB9.png')
-        self.TEAMB_nine = pygame.transform.scale(self.TEAMB_nine, (20, 20))
-
-        self.TEAMB_ten = pygame.image.load('images/players/teamB10.png')
-        self.TEAMB_ten = pygame.transform.scale(self.TEAMB_ten, (20, 20))
+        # load Team and their positions
+        MapTeam = {
+            'ball': 'others/ball.jpeg',
+            'PlayerAKeeper': 'players/TeamAk.png',
+            'PlayerA1': 'players/teamA1.png',
+            'PlayerA2': 'players/teamA2.png',
+            'PlayerA3': 'players/teamA3.png',
+            'PlayerA4': 'players/teamA4.png',
+            'PlayerA5': 'players/teamA5.png',
+            'PlayerA6': 'players/teamA6.png',
+            'PlayerA7': 'players/teamA7.png',
+            'PlayerA8': 'players/teamA8.png',
+            'PlayerA9': 'players/teamA9.png',
+            'PlayerA10': 'players/teamA10.png',
+            'PlayerBKeeper': 'players/TeamBk.png',
+            'PlayerB1': 'players/teamB1.png',
+            'PlayerB2': 'players/teamB2.png',
+            'PlayerB3': 'players/teamB3.png',
+            'PlayerB4': 'players/teamB4.png',
+            'PlayerB5': 'players/teamB5.png',
+            'PlayerB6': 'players/teamB6.png',
+            'PlayerB7': 'players/teamB7.png',
+            'PlayerB8': 'players/teamB8.png',
+            'PlayerB9': 'players/teamB9.png',
+            'PlayerB10': 'players/teamB10.png'
+        }
+        self.LoadTeamPositions = {}
+        for m in MapTeam.keys():
+            image_path = 'images/'+str(MapTeam[m])
+            self.LoadTeamPositions[m] = pygame.image.load(image_path)
+            self.LoadTeamPositions[m] = pygame.transform.scale(
+                self.LoadTeamPositions[m], (20, 20))
 
         self.nextTeam = 'Team A'
 
@@ -152,145 +113,54 @@ class Environment:
 
         # Object Detection
         pygame.draw.rect(self.DISPLAYSURF, self.RED,
-                         (self.net.bal.listX[count]-3, self.net.bal.listY[count]-3, 25, 25))
+                         (self.net.superDict['ball'].listX[count]-3, self.net.superDict['ball'].listY[count]-3, 25, 25))
 
         # Boundary Box around nextPlayer
         pygame.draw.rect(self.DISPLAYSURF, self.RED,
-                         (self.net.bal.listX[-1]-3, self.net.bal.listY[-1]-3, 25, 25))
+                         (self.net.superDict['ball'].listX[-1]-3, self.net.superDict['ball'].listY[-1]-3, 25, 25))
 
         return
 
     def displayBall(self, count):
         # display ball
         self.DISPLAYSURF.blit(
-            self.foot_ball, (self.net.bal.listX[count], self.net.bal.listY[count]))
+            self.LoadTeamPositions['ball'], (self.net.superDict['ball'].listX[count], self.net.superDict['ball'].listY[count]))
         return
 
     def displayDefaultA(self, count=0):
-        self.DISPLAYSURF.blit(self.TEAMA_goalkeeper,
-                              (self.net.keeperA.listX[count], self.net.keeperA.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_one, (self.net.A1.listX[count], self.net.A1.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_two, (self.net.A2.listX[count], self.net.A2.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_three, (self.net.A3.listX[count], self.net.A3.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_four, (self.net.A4.listX[count], self.net.A4.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_five, (self.net.A5.listX[count], self.net.A5.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_six, (self.net.A6.listX[count], self.net.A6.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_seven, (self.net.A7.listX[count], self.net.A7.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_eight, (self.net.A8.listX[count], self.net.A8.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_nine, (self.net.A9.listX[count], self.net.A9.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMA_ten, (self.net.A10.listX[count], self.net.A10.listY[count]))
+
+        for k in self.net.playersListA:
+            self.DISPLAYSURF.blit(self.LoadTeamPositions[str(k)], (self.net.superDict[str(
+                k)].listX[count], self.net.superDict[str(k)].listY[count]))
 
         return
 
     def displayDefaultB(self, count=0):
         # randomly display players A within enclosed position x, y, xwidth, ywidth
-        self.DISPLAYSURF.blit(self.TEAMB_goalkeeper,
-                              (self.net.keeperB.listX[count], self.net.keeperB.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_one, (self.net.B1.listX[count], self.net.B1.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_two, (self.net.B2.listX[count], self.net.B2.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_three, (self.net.B3.listX[count], self.net.B3.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_four, (self.net.B4.listX[count], self.net.B4.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_five, (self.net.B5.listX[count], self.net.B5.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_six, (self.net.B6.listX[count], self.net.B6.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_seven, (self.net.B7.listX[count], self.net.B7.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_eight, (self.net.B8.listX[count], self.net.B8.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_nine, (self.net.B9.listX[count], self.net.B9.listY[count]))
-        self.DISPLAYSURF.blit(
-            self.TEAMB_ten, (self.net.B10.listX[count], self.net.B10.listY[count]))
+        for k in self.net.playersListB:
+            self.DISPLAYSURF.blit(self.LoadTeamPositions[str(k)], (self.net.superDict[str(
+                k)].listX[count], self.net.superDict[str(k)].listY[count]))
+
         return
 
     def updateLastPosition(self, count):
+
+        for k in self.net.playersListA:
+            self.net.superDict[str(
+                k)].positionx = self.net.superDict[str(k)].listX[count]
+            self.net.superDict[str(
+                k)].positiony = self.net.superDict[str(k)].listY[count]
+
+        for k in self.net.playersListB:
+            self.net.superDict[str(
+                k)].positionx = self.net.superDict[str(k)].listX[count]
+            self.net.superDict[str(
+                k)].positiony = self.net.superDict[str(k)].listY[count]
+
         # ball
-        self.net.bal.positionx = self.net.bal.listX[count]
-        self.net.bal.positiony = self.net.bal.listY[count]
+        self.net.superDict['ball'].positionx = self.net.superDict['ball'].listX[count]
+        self.net.superDict['ball'].positiony = self.net.superDict['ball'].listY[count]
 
-        # playersA
-        self.net.keeperA.positionx = self.net.keeperA.listX[count]
-        self.net.keeperA.positiony = self.net.keeperA.listY[count]
-
-        self.net.A1.positionx = self.net.A1.listX[count]
-        self.net.A1.positiony = self.net.A1.listY[count]
-
-        self.net.A2.positionx = self.net.A2.listX[count]
-        self.net.A2.positiony = self.net.A2.listY[count]
-
-        self.net.A3.positionx = self.net.A3.listX[count]
-        self.net.A3.positiony = self.net.A3.listY[count]
-
-        self.net.A4.positionx = self.net.A4.listX[count]
-        self.net.A4.positiony = self.net.A4.listY[count]
-
-        self.net.A5.positionx = self.net.A5.listX[count]
-        self.net.A5.positiony = self.net.A5.listY[count]
-
-        self.net.A6.positionx = self.net.A6.listX[count]
-        self.net.A6.positiony = self.net.A6.listY[count]
-
-        self.net.A7.positionx = self.net.A7.listX[count]
-        self.net.A7.positiony = self.net.A7.listY[count]
-
-        self.net.A8.positionx = self.net.A8.listX[count]
-        self.net.A8.positiony = self.net.A8.listY[count]
-
-        self.net.A9.positionx = self.net.A9.listX[count]
-        self.net.A9.positiony = self.net.A9.listY[count]
-
-        self.net.A10.positionx = self.net.A10.listX[count]
-        self.net.A10.positiony = self.net.A10.listY[count]
-
-        # PlayerB
-
-        self.net.keeperB.positionx = self.net.keeperB.listX[count]
-        self.net.keeperB.positiony = self.net.keeperB.listY[count]
-
-        self.net.B1.positionx = self.net.B1.listX[count]
-        self.net.B1.positiony = self.net.B1.listY[count]
-
-        self.net.B2.positionx = self.net.B2.listX[count]
-        self.net.B2.positiony = self.net.B2.listY[count]
-
-        self.net.B3.positionx = self.net.B3.listX[count]
-        self.net.B3.positiony = self.net.B3.listY[count]
-
-        self.net.B4.positionx = self.net.B4.listX[count]
-        self.net.B4.positiony = self.net.B4.listY[count]
-
-        self.net.B5.positionx = self.net.B5.listX[count]
-        self.net.B5.positiony = self.net.B5.listY[count]
-
-        self.net.B6.positionx = self.net.B6.listX[count]
-        self.net.B6.positiony = self.net.B6.listY[count]
-
-        self.net.B7.positionx = self.net.B7.listX[count]
-        self.net.B7.positiony = self.net.B7.listY[count]
-
-        self.net.B8.positionx = self.net.B8.listX[count]
-        self.net.B8.positiony = self.net.B8.listY[count]
-
-        self.net.B9.positionx = self.net.B9.listX[count]
-        self.net.B9.positiony = self.net.B9.listY[count]
-
-        self.net.B10.positionx = self.net.B10.listX[count]
-        self.net.B10.positiony = self.net.B10.listY[count]
         return
 
     # Always get sourced
@@ -369,8 +239,8 @@ class Environment:
             self.net.game_status = 'This is a Free Kick!!!'
             self.startingChoicePlayer = FreeKick[1]
             xcor, ycor = self.net.GetplayersLocation(FreeKick[1])
-            self.net.bal.positionx = xcor
-            self.net.bal.positiony = ycor
+            self.net.superDict['ball'].positionx = xcor
+            self.net.superDict['ball'].positiony = ycor
 
             if FreeKick[1] in self.net.playersListA:
                 nextPlayer = np.random.choice(self.net.playersListA[1:])

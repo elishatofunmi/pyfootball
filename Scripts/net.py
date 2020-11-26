@@ -1,9 +1,10 @@
 import numpy as np
-from Scripts.PlayersProperties import *
+from Scripts.PlayersProperties import defaultProperties
 from Scripts.regression import Regression
 import os
 import sys
 import time
+from copy import deepcopy
 
 
 class network:
@@ -15,102 +16,36 @@ class network:
         self.TeamBScore = 0
         self.game_status = ''
 
-        self.playersListA = [
-            # players A1 - A10
-            'PlayerAKeeper',
-            'PlayerA1',
-            'PlayerA2',
-            'PlayerA3',
-            'PlayerA4',
-            'PlayerA5',
-            'PlayerA6',
-            'PlayerA7',
-            'PlayerA8',
-            'PlayerA9',
-            'PlayerA10']
-        self.playersListB = [
-            # players B1 - B10
-            'PlayerBKeeper',
-            'PlayerB1',
-            'PlayerB2',
-            'PlayerB3',
-            'PlayerB4',
-            'PlayerB5',
-            'PlayerB6',
-            'PlayerB7',
-            'PlayerB8',
-            'PlayerB9',
-            'PlayerB10',
-        ]
+        self.playersListA = ['PlayerAKeeper', 'PlayerA1', 'PlayerA2', 'PlayerA3', 'PlayerA4', 'PlayerA5',
+                             'PlayerA6', 'PlayerA7', 'PlayerA8', 'PlayerA9', 'PlayerA10']
+        self.playersListB = ['PlayerBKeeper', 'PlayerB1', 'PlayerB2', 'PlayerB3', 'PlayerB4', 'PlayerB5',
+                             'PlayerB6', 'PlayerB7', 'PlayerB8', 'PlayerB9', 'PlayerB10']
 
-        self.bal = defaultProperties()
-        self.bal.setCoordinates(600, 350)
+        DefaultCoordinates = {
+            'ball': (600, 350), 'PlayerAKeeper': (40, 330), 'PlayerA1': (140, 100),
+            'PlayerA2': (140, 250), 'PlayerA3': (140, 400), 'PlayerA4': (140, 550),
+            'PlayerA5': (340, 150), 'PlayerA6': (340, 300), 'PlayerA7': (340, 450),
+            'PlayerA8': (500, 350), 'PlayerA9': (550, 300), 'PlayerA10': (550, 400),
+            'PlayerB1': (1030, 100), 'PlayerB2': (1030, 250), 'PlayerB3': (1030, 400),
+            'PlayerB4': (1030, 550), 'PlayerB5': (830, 150), 'PlayerB6': (830, 300),
+            'PlayerB7': (830, 450), 'PlayerB8': (750, 350), 'PlayerB9': (650, 300),
+            'PlayerB10': (650, 400), 'PlayerBKeeper': (1130, 330)
+        }
 
-        self.A1 = defaultProperties()
-        self.A1.setCoordinates(140, 100)
+        self.superDict = {}
+        # initialize ball
+        self.superDict['ball'] = defaultProperties()
+        self.superDict['ball'].setCoordinates(*DefaultCoordinates['ball'])
 
-        self.A2 = defaultProperties()
-        self.A2.setCoordinates(140, 250)
+        # initialize playersA
+        for k in self.playersListA:
+            self.superDict[str(k)] = defaultProperties()
+            self.superDict[str(k)].setCoordinates(*DefaultCoordinates[str(k)])
 
-        self.A3 = defaultProperties()
-        self.A3.setCoordinates(140, 400)
-
-        self.A4 = defaultProperties()
-        self.A4.setCoordinates(140, 550)
-
-        self.A5 = defaultProperties()
-        self.A5.setCoordinates(340, 150)
-
-        self.A6 = defaultProperties()
-        self.A6.setCoordinates(340, 300)
-
-        self.A7 = defaultProperties()
-        self.A7.setCoordinates(340, 450)
-
-        self.A8 = defaultProperties()
-        self.A8.setCoordinates(500, 350)
-
-        self.A9 = defaultProperties()
-        self.A9.setCoordinates(550, 300)
-
-        self.A10 = defaultProperties()
-        self.A10.setCoordinates(550, 400)
-
-        self.keeperA = defaultProperties()
-        self.keeperA.setCoordinates(40, 330)
-
-        self.B1 = defaultProperties()
-        self.B1.setCoordinates(1030, 100)
-
-        self.B2 = defaultProperties()
-        self.B2.setCoordinates(1030, 250)
-
-        self.B3 = defaultProperties()
-        self.B3.setCoordinates(1030, 400)
-
-        self.B4 = defaultProperties()
-        self.B4.setCoordinates(1030, 550)
-
-        self.B5 = defaultProperties()
-        self.B5.setCoordinates(830, 150)
-
-        self.B6 = defaultProperties()
-        self.B6.setCoordinates(830, 300)
-
-        self.B7 = defaultProperties()
-        self.B7.setCoordinates(830, 450)
-
-        self.B8 = defaultProperties()
-        self.B8.setCoordinates(750, 350)
-
-        self.B9 = defaultProperties()
-        self.B9.setCoordinates(650, 300)
-
-        self.B10 = defaultProperties()
-        self.B10.setCoordinates(650, 400)
-
-        self.keeperB = defaultProperties()
-        self.keeperB.setCoordinates(1130, 330)
+        # initialize playersB
+        for k in self.playersListB:
+            self.superDict[str(k)] = deepcopy(defaultProperties())
+            self.superDict[str(k)].setCoordinates(*DefaultCoordinates[str(k)])
 
         x, y = 0, 0
         return
@@ -138,7 +73,7 @@ class network:
         # get KeeperA's location
         x1, y1 = self.GetplayersLocation(defaultPlayer='PlayerAKeeper')
         x2, y2 = self.GetplayersLocation(defaultPlayer='PlayerBKeeper')
-        ballx, bally = self.bal.GetlastLocation()
+        ballx, bally = self.superDict['ball'].GetlastLocation()
         GoalStatus = 'Nil'
         if ballx >= 20 and ballx <= 40:
             if (bally > y1+20 or bally < y1-20) and (bally > 250 and bally < 450):
@@ -192,15 +127,15 @@ class network:
             # set Keeper's movement to follow the ball
 
             if keeper in self.playersListA:
-                self.keeperA.listY = [ymoves[-1]-10, ymoves[-1]-5,
-                                      ymoves[-1]+10, ymoves[-1]+5, ymoves[-1]]*10
-                self.keeperA.listX = [xmoves[-1]]*50
+                self.superDict['PlayerAKeeper'].listY = [ymoves[-1]-10, ymoves[-1]-5,
+                                                         ymoves[-1]+10, ymoves[-1]+5, ymoves[-1]]*10
+                self.superDict['PlayerAKeeper'].listX = [xmoves[-1]]*50
                 self.game_status = "Awesome!!! Goalkeeper caught the ball."
 
             else:
-                self.keeperB.listY = [ymoves[-1]-10, ymoves[-1]-5,
-                                      ymoves[-1]+10, ymoves[-1]+5, ymoves[-1]]*10
-                self.keeperB.listX = [xmoves[-1]]*50
+                self.superDict['PlayerBKeeper'].listY = [ymoves[-1]-10, ymoves[-1]-5,
+                                                         ymoves[-1]+10, ymoves[-1]+5, ymoves[-1]]*10
+                self.superDict['PlayerBKeeper'].listX = [xmoves[-1]]*50
                 self.game_status = "Awesome!!! Goalkeeper caught the ball."
 
         else:
@@ -244,7 +179,7 @@ class network:
         Status = False
         # Get the current ball location
         count = self.count
-        currentX, currentY = self.bal.listX[count], self.bal.listY[count]
+        currentX, currentY = self.superDict['ball'].listX[count], self.superDict['ball'].listY[count]
 
         EstimatedDistance = {}
         for player in OpposingPlayers.keys():
@@ -363,7 +298,7 @@ class network:
         # update straight line movement of the ball from source to nextplayer
 
         xbound, ybound = SourcedictDataX[outplayer]
-        xsource, ysource = self.bal.GetlastLocation()
+        xsource, ysource = self.superDict['ball'].GetlastLocation()
 
         xmoves, ymoves = self.linearRegression(
             xsource, ysource, xbound, ybound)
@@ -420,76 +355,10 @@ class network:
         """
         x = coordinates[0]
         y = coordinates[1]
-        if defaultPlayer == 'PlayerA1':
-            self.A1.listX, self.A1.listY = x, y
 
-        elif defaultPlayer == 'PlayerA2':
-            self.A2.listX, self.A2.listY = x, y
-
-        elif defaultPlayer == 'PlayerA3':
-            self.A3.listX, self.A3.listY = x, y
-
-        elif defaultPlayer == 'PlayerA4':
-            self.A4.listX, self.A4.listY = x, y
-
-        elif defaultPlayer == 'PlayerA5':
-            self.A5.listX, self.A5.listY = x, y
-
-        elif defaultPlayer == 'PlayerA6':
-            self.A6.listX, self.A6.listY = x, y
-
-        elif defaultPlayer == 'PlayerA7':
-            self.A7.listX, self.A7.listY = x, y
-
-        elif defaultPlayer == 'PlayerA8':
-            self.A8.listX, self.A8.listY = x, y
-
-        elif defaultPlayer == 'PlayerA9':
-            self.A9.listX, self.A9.listY = x, y
-
-        elif defaultPlayer == 'PlayerA10':
-            self.A10.listX, self.A10.listY = x, y
-
-        elif defaultPlayer == 'PlayerAKeeper':
-            self.keeperA.listX, self.keeperA.listY = x, y
-
-        # begin for B
-        elif defaultPlayer == 'PlayerB1':
-            self.B1.listX, self.B1.listY = x, y
-
-        elif defaultPlayer == 'PlayerB2':
-            self.B2.listX, self.B2.listY = x, y
-
-        elif defaultPlayer == 'PlayerB3':
-            self.B3.listX, self.B3.listY = x, y
-
-        elif defaultPlayer == 'PlayerB4':
-            self.B4.listX, self.B4.listY = x, y
-
-        elif defaultPlayer == 'PlayerB5':
-            self.B5.listX, self.B5.listY = x, y
-
-        elif defaultPlayer == 'PlayerB6':
-            self.B6.listX, self.B6.listY = x, y
-
-        elif defaultPlayer == 'PlayerB7':
-            self.B7.listX, self.B7.listY = x, y
-
-        elif defaultPlayer == 'PlayerB8':
-            self.B8.listX, self.B8.listY = x, y
-
-        elif defaultPlayer == 'PlayerB9':
-            self.B9.listX, self.B9.listY = x, y
-
-        elif defaultPlayer == 'PlayerB10':
-            self.B10.listX, self.B10.listY = x, y
-
-        elif defaultPlayer == 'PlayerBKeeper':
-            self.keeperB.listX, self.keeperB.listY = x, y
-
-        elif defaultPlayer == 'ball':
-            self.bal.listX, self.bal.listY = x, y
-
+        if defaultPlayer in self.superDict.keys():
+            self.superDict[defaultPlayer].listX = x
+            self.superDict[defaultPlayer].listY = y
         else:
             pass
 
@@ -499,58 +368,9 @@ class network:
         """
         updates a new location for the player passed in as defaultPlayer
         """
-        if defaultPlayer == 'PlayerA1':
-            x, y = self.A1.positionx, self.A1.positiony
-        elif defaultPlayer == 'PlayerA2':
-            x, y = self.A2.positionx, self.A2.positiony
-        elif defaultPlayer == 'PlayerA3':
-            x, y = self.A3.positionx, self.A3.positiony
-        elif defaultPlayer == 'PlayerA4':
-            x, y = self.A4.positionx, self.A4.positiony
-        elif defaultPlayer == 'PlayerA5':
-            x, y = self.A5.positionx, self.A5.positiony
-        elif defaultPlayer == 'PlayerA6':
-            x, y = self.A6.positionx, self.A6.positiony
-        elif defaultPlayer == 'PlayerA7':
-            x, y = self.A7.positionx, self.A7.positiony
-        elif defaultPlayer == 'PlayerA8':
-            x, y = self.A8.positionx, self.A8.positiony
-        elif defaultPlayer == 'PlayerA9':
-            x, y = self.A9.positionx, self.A9.positiony
-        elif defaultPlayer == 'PlayerA10':
-            x, y = self.A10.positionx, self.A10.positiony
-        elif defaultPlayer == 'PlayerAKeeper':
-            x, y = self.keeperA.positionx, self.keeperA.positiony
+        x = self.superDict[defaultPlayer].positionx
+        y = self.superDict[defaultPlayer].positiony
 
-        # begin for B
-        elif defaultPlayer == 'PlayerB1':
-            x, y = self.B1.positionx, self.B1.positiony
-        elif defaultPlayer == 'PlayerB2':
-            x, y = self.B2.positionx, self.B2.positiony
-        elif defaultPlayer == 'PlayerB3':
-            x, y = self.B3.positionx, self.B3.positiony
-        elif defaultPlayer == 'PlayerB4':
-            x, y = self.B4.positionx, self.B4.positiony
-        elif defaultPlayer == 'PlayerB5':
-            x, y = self.B5.positionx, self.B5.positiony
-        elif defaultPlayer == 'PlayerB6':
-            x, y = self.B6.positionx, self.B6.positiony
-        elif defaultPlayer == 'PlayerB7':
-            x, y = self.B7.positionx, self.B7.positiony
-        elif defaultPlayer == 'PlayerB8':
-            x, y = self.B8.positionx, self.B8.positiony
-        elif defaultPlayer == 'PlayerB9':
-            x, y = self.B9.positionx, self.B9.positiony
-        elif defaultPlayer == 'PlayerB10':
-            x, y = self.B10.positionx, self.B10.positiony
-
-        elif defaultPlayer == 'ball':
-            x, y = self.bal.positionx, self.bal.positiony
-        elif defaultPlayer == 'PlayerBKeeper':
-            x, y = self.keeperB.positionx, self.keeperB.positiony
-
-        else:
-            pass
         return x, y
 
     def GetplayersBoundary(self, defaultPlayer='ball'):
