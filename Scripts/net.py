@@ -1,64 +1,9 @@
 import numpy as np
 from Scripts.PlayersProperties import *
+from Scripts.regression import Regression
 import os
 import sys
 import time
-
-
-class Regression:
-    def __init__(self):
-        return
-
-    def network(self, xsource, ysource, Xnew, Ynew, divisor=50):
-        slope = 0
-        intercept = 0
-
-        #Slope and intercept
-        while True:
-
-            try:
-                slope = (ysource - Ynew)/(xsource - Xnew)
-                intercept = ysource - (slope*xsource)
-            except ZeroDivisionError:
-                slope = 0
-                pass
-
-            if (slope != np.inf) and (intercept != np.inf):
-                break
-            else:
-                slope = 0
-                break
-
-        # randomly select 50 new values along the slope between xsource and xnew (monotonically decreasing/increasing)
-        XNewList = [xsource]
-        if slope != 0 and slope != np.nan and intercept != 0 and intercept != np.nan:
-            if xsource < Xnew:
-                differences = Xnew - xsource
-                increment = differences / divisor
-                newXval = xsource
-                for i in range(divisor):
-
-                    newXval += increment
-                    XNewList.append(int(newXval))
-            else:
-                differences = xsource - Xnew
-                decrement = differences / divisor
-                newXval = xsource
-                for i in range(divisor-1):
-
-                    newXval -= decrement
-                    XNewList.append(int(newXval))
-
-            # determine the values of y, from the new values of x, using y= mx + c
-            yNewList = []
-            for i in XNewList:
-                findy = (slope * i) + intercept  # y = mx + c
-                yNewList.append(int(findy))
-
-        else:
-            XNewList = [xsource]*50
-            yNewList = [ysource]*50
-        return XNewList[:50], yNewList[:50]
 
 
 class network:
@@ -476,76 +421,74 @@ class network:
         x = coordinates[0]
         y = coordinates[1]
         if defaultPlayer == 'PlayerA1':
-            self.A1.listX = x
-            self.A1.listY = y
+            self.A1.listX, self.A1.listY = x, y
+
         elif defaultPlayer == 'PlayerA2':
-            self.A2.listX = x
-            self.A2.listY = y
+            self.A2.listX, self.A2.listY = x, y
+
         elif defaultPlayer == 'PlayerA3':
-            self.A3.listX = x
-            self.A3.listY = y
+            self.A3.listX, self.A3.listY = x, y
+
         elif defaultPlayer == 'PlayerA4':
-            self.A4.listX = x
-            self.A4.listY = y
+            self.A4.listX, self.A4.listY = x, y
+
         elif defaultPlayer == 'PlayerA5':
-            self.A5.listX = x
-            self.A5.listY = y
+            self.A5.listX, self.A5.listY = x, y
+
         elif defaultPlayer == 'PlayerA6':
-            self.A6.listX = x
-            self.A6.listY = y
+            self.A6.listX, self.A6.listY = x, y
+
         elif defaultPlayer == 'PlayerA7':
-            self.A7.listX = x
-            self.A7.listY = y
+            self.A7.listX, self.A7.listY = x, y
+
         elif defaultPlayer == 'PlayerA8':
-            self.A8.listX = x
-            self.A8.listY = y
+            self.A8.listX, self.A8.listY = x, y
+
         elif defaultPlayer == 'PlayerA9':
-            self.A9.listX = x
-            self.A9.listY = y
+            self.A9.listX, self.A9.listY = x, y
+
         elif defaultPlayer == 'PlayerA10':
-            self.A10.listX = x
-            self.A10.listY = y
+            self.A10.listX, self.A10.listY = x, y
+
         elif defaultPlayer == 'PlayerAKeeper':
-            self.keeperA.listX = x
-            self.keeperA.listY = y
+            self.keeperA.listX, self.keeperA.listY = x, y
 
         # begin for B
         elif defaultPlayer == 'PlayerB1':
-            self.B1.listX = x
-            self.B1.listY = y
+            self.B1.listX, self.B1.listY = x, y
+
         elif defaultPlayer == 'PlayerB2':
-            self.B2.listX = x
-            self.B2.listY = y
+            self.B2.listX, self.B2.listY = x, y
+
         elif defaultPlayer == 'PlayerB3':
-            self.B3.listX = x
-            self.B3.listY = y
+            self.B3.listX, self.B3.listY = x, y
+
         elif defaultPlayer == 'PlayerB4':
-            self.B4.listX = x
-            self.B4.listY = y
+            self.B4.listX, self.B4.listY = x, y
+
         elif defaultPlayer == 'PlayerB5':
-            self.B5.listX = x
-            self.B5.listY = y
+            self.B5.listX, self.B5.listY = x, y
+
         elif defaultPlayer == 'PlayerB6':
-            self.B6.listX = x
-            self.B6.listY = y
+            self.B6.listX, self.B6.listY = x, y
+
         elif defaultPlayer == 'PlayerB7':
-            self.B7.listX = x
-            self.B7.listY = y
+            self.B7.listX, self.B7.listY = x, y
+
         elif defaultPlayer == 'PlayerB8':
-            self.B8.listX = x
-            self.B8.listY = y
+            self.B8.listX, self.B8.listY = x, y
+
         elif defaultPlayer == 'PlayerB9':
-            self.B9.listX = x
-            self.B9.listY = y
+            self.B9.listX, self.B9.listY = x, y
+
         elif defaultPlayer == 'PlayerB10':
-            self.B10.listX = x
-            self.B10.listY = y
+            self.B10.listX, self.B10.listY = x, y
+
         elif defaultPlayer == 'PlayerBKeeper':
-            self.keeperB.listX = x
-            self.keeperB.listY = y
+            self.keeperB.listX, self.keeperB.listY = x, y
+
         elif defaultPlayer == 'ball':
-            self.bal.listX = x
-            self.bal.listY = y
+            self.bal.listX, self.bal.listY = x, y
 
         else:
             pass
