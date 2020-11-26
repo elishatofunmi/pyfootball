@@ -98,30 +98,74 @@ class network:
             'PlayerB10',
         ]
 
-        self.bal = ball()
+        self.bal = defaultProperties()
+        self.bal.setCoordinates(600, 350)
 
-        self.A1 = playerA1()
-        self.A2 = playerA2()
-        self.A3 = playerA3()
-        self.A4 = playerA4()
-        self.A5 = playerA5()
-        self.A6 = playerA6()
-        self.A7 = playerA7()
-        self.A8 = playerA8()
-        self.A9 = playerA9()
-        self.A10 = playerA10()
-        self.keeperA = playerAKeeper()
-        self.B1 = playerB1()
-        self.B2 = playerB2()
-        self.B3 = playerB3()
-        self.B4 = playerB4()
-        self.B5 = playerA5()
-        self.B6 = playerB6()
-        self.B7 = playerB7()
-        self.B8 = playerB8()
-        self.B9 = playerB9()
-        self.B10 = playerB10()
-        self.keeperB = playerBKeeper()
+        self.A1 = defaultProperties()
+        self.A1.setCoordinates(140, 100)
+
+        self.A2 = defaultProperties()
+        self.A2.setCoordinates(140, 250)
+
+        self.A3 = defaultProperties()
+        self.A3.setCoordinates(140, 400)
+
+        self.A4 = defaultProperties()
+        self.A4.setCoordinates(140, 550)
+
+        self.A5 = defaultProperties()
+        self.A5.setCoordinates(340, 150)
+
+        self.A6 = defaultProperties()
+        self.A6.setCoordinates(340, 300)
+
+        self.A7 = defaultProperties()
+        self.A7.setCoordinates(340, 450)
+
+        self.A8 = defaultProperties()
+        self.A8.setCoordinates(500, 350)
+
+        self.A9 = defaultProperties()
+        self.A9.setCoordinates(550, 300)
+
+        self.A10 = defaultProperties()
+        self.A10.setCoordinates(550, 400)
+
+        self.keeperA = defaultProperties()
+        self.keeperA.setCoordinates(40, 330)
+
+        self.B1 = defaultProperties()
+        self.B1.setCoordinates(1030, 100)
+
+        self.B2 = defaultProperties()
+        self.B2.setCoordinates(1030, 250)
+
+        self.B3 = defaultProperties()
+        self.B3.setCoordinates(1030, 400)
+
+        self.B4 = defaultProperties()
+        self.B4.setCoordinates(1030, 550)
+
+        self.B5 = defaultProperties()
+        self.B5.setCoordinates(830, 150)
+
+        self.B6 = defaultProperties()
+        self.B6.setCoordinates(830, 300)
+
+        self.B7 = defaultProperties()
+        self.B7.setCoordinates(830, 450)
+
+        self.B8 = defaultProperties()
+        self.B8.setCoordinates(750, 350)
+
+        self.B9 = defaultProperties()
+        self.B9.setCoordinates(650, 300)
+
+        self.B10 = defaultProperties()
+        self.B10.setCoordinates(650, 400)
+
+        self.keeperB = defaultProperties()
+        self.keeperB.setCoordinates(1130, 330)
 
         x, y = 0, 0
         return

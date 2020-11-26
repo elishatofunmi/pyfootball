@@ -1,5 +1,5 @@
 from Scripts.PlayersProperties import *
-from Scripts.Network import network
+from Scripts.net import network
 
 
 class Rules:
